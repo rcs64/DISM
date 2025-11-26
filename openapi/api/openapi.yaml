@@ -1,0 +1,577 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: info@dtic.org
+  description: Esto es un Hola Mundo
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Hola Mundo Dtic
+  version: 1.0.0
+servers:
+- description: Servidor ApiRest DTIC
+  url: http://localhost:8080
+paths:
+  /usuarios:
+    get:
+      description: GET usuarios
+      operationId: usuariosGET
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Usuario"
+                type: array
+          description: Lista de usuarios
+        "404":
+          description: No se ha encontrado ningún usuario
+      tags:
+      - usuarios
+      x-eov-operation-handler: controllers/UsuariosController
+    post:
+      description: POST usuarios
+      operationId: usuariosPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Usuario"
+        required: true
+      responses:
+        "201":
+          description: "Se ha registrado el usuario {identificador} con el nombre\
+            \ {nombre}"
+        "400":
+          description: Fallo al registrar usuario
+      tags:
+      - usuarios
+      x-eov-operation-handler: controllers/UsuariosController
+  /usuarios/{usuario}:
+    get:
+      description: GET usuario concreto por nombre
+      operationId: usuariosByNombreGET
+      parameters:
+        - description: Nombre del usuario
+          explode: false
+          in: path
+          name: usuario
+          required: true
+          schema:
+            type: string
+          style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Usuario"
+          description: Información del usuario
+        "404":
+          description: No se ha encontrado ningún usuario con ese nombre
+      tags:
+        - usuarios
+        - usuario
+      x-eov-operation-handler: controllers/UsuariosController
+  /usuarios/{identificador}:
+    delete:
+      description: DELETE usuario
+      operationId: usuariosIdentificadorDELETE
+      parameters:
+      - explode: false
+        in: path
+        name: identificador
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "201":
+          description: "Se ha eliminado el usuario con el identificador {identificador}"
+        "400":
+          description: Fallo al eliminar usuario
+      tags:
+      - usuarios
+      x-eov-operation-handler: controllers/UsuariosController
+    get:
+      description: GET usuario concreto
+      operationId: usuariosIdentificadorGET
+      parameters:
+      - description: Id del usuario
+        explode: false
+        in: path
+        name: identificador
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Trabajo"
+                type: array
+          description: Información del usuario
+        "404":
+          description: No se ha encontrado ningún trabajo
+      tags:
+      - usuarios
+      - identificador
+      x-eov-operation-handler: controllers/UsuariosController
+    put:
+      description: PUT usuario
+      operationId: usuariosIdentificadorPUT
+      parameters:
+      - explode: false
+        in: path
+        name: identificador
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Usuario"
+        required: true
+      responses:
+        "201":
+          description: "Se ha actualizado el usuario con el identificador {identificador}"
+        "400":
+          description: Fallo al actualizar usuario
+      tags:
+      - usuarios
+      x-eov-operation-handler: controllers/UsuariosController
+  /trabajos:
+    get:
+      description: GET trabajos
+      operationId: trabajosGET
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Trabajo"
+                type: array
+          description: Lista de trabajos
+        "404":
+          description: No se ha encontrado ningún trabajo
+      tags:
+      - trabajos
+      x-eov-operation-handler: controllers/TrabajosController
+    post:
+      description: POST trabajos
+      operationId: trabajosPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Trabajo"
+        required: true
+      responses:
+        "201":
+          description: "Se ha registrado el trabajo {identificador} con el nombre\
+            \ {nombre}"
+        "400":
+          description: Fallo al registrar trabajo
+      tags:
+      - trabajos
+      x-eov-operation-handler: controllers/TrabajosController
+  /trabajos/{identificador}:
+    delete:
+      description: DELETE trabajo
+      operationId: trabajosIdentificadorDELETE
+      parameters:
+      - explode: false
+        in: path
+        name: identificador
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "201":
+          description: "Se ha eliminado el trabajo con el identificador {identificador}"
+        "400":
+          description: Fallo al eliminar trabajo
+      tags:
+      - trabajos
+      x-eov-operation-handler: controllers/TrabajosController
+    get:
+      description: GET trabajo concreto
+      operationId: trabajosIdentificadorGET
+      parameters:
+      - description: Id del trabajo
+        explode: false
+        in: path
+        name: identificador
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Trabajo"
+                type: array
+          description: Información del trabajo
+        "404":
+          description: No se ha encontrado ningún trabajo
+      tags:
+      - trabajos
+      - identificador
+      x-eov-operation-handler: controllers/TrabajosController
+    put:
+      description: PUT trabajo
+      operationId: trabajosIdentificadorPUT
+      parameters:
+      - explode: false
+        in: path
+        name: identificador
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Trabajo"
+        required: true
+      responses:
+        "201":
+          description: Se ha actualizado el trabajo con la nueva fecha y hora de salida
+        "400":
+          description: Fallo al actualizar trabajo
+      tags:
+      - trabajos
+      x-eov-operation-handler: controllers/TrabajosController
+  /fichajes:
+    get:
+      description: GET fichajes
+      operationId: fichajesGET
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Fichaje"
+                type: array
+          description: Lista de fichajes
+        "404":
+          description: No se ha encontrado ningún fichaje
+      tags:
+      - fichajes
+      x-eov-operation-handler: controllers/FichajesController
+    post:
+      description: POST fichaje
+      operationId: fichajesPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Fichaje"
+        required: true
+      responses:
+        "201":
+          description: "Se ha registrado el fichaje {idTrabajo} con el usuario Paco"
+        "400":
+          description: Fallo al registrar fichaje
+      tags:
+      - fichajes
+      x-eov-operation-handler: controllers/FichajesController
+
+  /fichajes/usuario/{idUsuario}:
+    get:
+      description: GET fichajes por usuario
+      operationId: fichajesUsuarioGET
+      parameters:
+      - explode: false
+        in: path
+        name: idUsuario
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Fichaje"
+                type: array
+          description: Lista de fichajes
+        "404":
+          description: No se ha encontrado ningún fichaje
+      tags:
+      - fichajes
+      x-eov-operation-handler: controllers/FichajesController
+  
+  /fichajes/{identificador}:
+    delete:
+      description: DELETE fichaje
+      operationId: fichajesIdentificadorDELETE
+      parameters:
+      - explode: false
+        in: path
+        name: identificador
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "201":
+          description: "Se ha eliminado el fichaje con el identificador {identificador}"
+        "400":
+          description: Fallo al eliminar fichaje
+      tags:
+      - fichajes
+      x-eov-operation-handler: controllers/FichajesController
+    get:
+      description: GET fichaje especifico
+      operationId: fichajesIdentificadorGET
+      parameters:
+      - explode: false
+        in: path
+        name: identificador
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Fichaje"
+          description: Fichaje obtenido
+        "404":
+          description: Fichaje no encontrado
+      tags:
+      - fichajes
+      x-eov-operation-handler: controllers/FichajesController
+    put:
+      description: POST fichaje
+      operationId: fichajesIdentificadorPUT
+      parameters:
+      - explode: false
+        in: path
+        name: identificador
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Fichaje"
+        required: true
+      responses:
+        "201":
+          description: Se ha actualizado el fichaje con la nueva fecha y hora de salida
+        "400":
+          description: Fallo al actualizar fichaje
+      tags:
+      - fichajes
+      x-eov-operation-handler: controllers/FichajesController
+  /apikey:
+    get:
+      description: GET apikey
+      operationId: apikeyGET
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ApiKey"
+                type: array
+          description: Lista de apikeys
+        "404":
+          description: No se ha encontrado ningún apikey
+      tags:
+      - apikey
+      x-eov-operation-handler: controllers/ApikeyController
+    post:
+      description: POST apikey
+      operationId: apikeyPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ApiKey"
+        required: true
+      responses:
+        "201":
+          description: "Se ha registrado el apikey {idTrabajo} con el usuario Paco"
+        "400":
+          description: Fallo al registrar apikey
+      tags:
+      - apikey
+      x-eov-operation-handler: controllers/ApikeyController
+  /apikey/{identificador}:
+    delete:
+      description: DELETE apikey
+      operationId: apikeyIdentificadorDELETE
+      parameters:
+      - explode: false
+        in: path
+        name: identificador
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "201":
+          description: "Se ha eliminado el apikey con el identificador {identificador}"
+        "400":
+          description: Fallo al eliminar apikey
+      tags:
+      - apikey
+      x-eov-operation-handler: controllers/ApikeyController
+    get:
+      description: GET apikey especifica
+      operationId: apikeyIdentificadorGET
+      parameters:
+      - explode: false
+        in: path
+        name: identificador
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKey"
+          description: Apikey obtenido
+        "404":
+          description: Apikey no encontrada
+      tags:
+      - apikey
+      x-eov-operation-handler: controllers/ApikeyController
+    put:
+      description: POST apikey
+      operationId: apikeyIdentificadorPUT
+      parameters:
+      - explode: false
+        in: path
+        name: identificador
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ApiKey"
+        required: true
+      responses:
+        "201":
+          description: "Se ha actualizado el apikey con el identificador {identificador}"
+        "400":
+          description: Fallo al actualizar apikey
+      tags:
+      - apikey
+      x-eov-operation-handler: controllers/ApikeyController
+components:
+  schemas:
+    Usuario:
+      example:
+        clave: clave
+        usuario: usuario
+        nombre: nombre
+        identificador: 0
+      properties:
+        identificador:
+          nullable: false
+          type: integer
+        nombre:
+          maxLength: 100
+          nullable: false
+          type: string
+        usuario:
+          maxLength: 50
+          type: string
+        clave:
+          maxLength: 50
+          type: string
+        esAdmin:
+          maxLength: 1
+          type: integer
+          default: 0
+      type: object
+    Trabajo:
+      example:
+        nombre: nombre
+        identificador: 0
+      properties:
+        identificador:
+          nullable: false
+          type: integer
+        nombre:
+          maxLength: 200
+          nullable: false
+          type: string
+      type: object
+    ApiKey:
+      example:
+        key: key
+        identificador: 0
+      properties:
+        identificador:
+          nullable: false
+          readOnly: true
+          type: integer
+        key:
+          maxLength: 50
+          nullable: false
+          type: string
+      type: object
+    Fichaje:
+      example:
+        idTrabajo: 1
+        fechaHoraSalida: 2000-01-23T04:56:07.000+00:00
+        geoLong: 2.302136
+        idUsuario: 5
+        geoLat: 5.637377
+        horasTrabajadas: 6
+        fechaHoraEntrada: 2000-01-23T04:56:07.000+00:00
+        identificador: 0
+      properties:
+        identificador:
+          nullable: false
+          readOnly: true
+          type: integer
+        fechaHoraEntrada:
+          type: string
+        fechaHoraSalida:
+          type: string 
+          nullable: true
+        horasTrabajadas:
+          type: number
+        idTrabajo:
+          type: integer
+        idUsuario:
+          type: integer
+        geoLat:
+          format: float
+          type: number
+        geoLong:
+          format: float
+          type: number
+      type: object

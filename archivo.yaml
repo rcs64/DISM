@@ -1,0 +1,524 @@
+openapi: 3.0.0
+servers:
+  - description: Servidor ApiRest DTIC
+    url: http://localhost:8080
+info:
+  description: Esto es un Hola Mundo
+  version: "1.0.0"
+  title: Hola Mundo Dtic
+  contact:
+    email: info@dtic.org
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+paths:
+  /usuarios:
+    get: 
+      tags:
+        - usuarios
+      description: GET usuarios
+      operationId: usuariosGET
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Usuario'
+        '404':
+          description: No se ha encontrado ningún usuario
+    post:
+      tags:
+        - usuarios
+      description: POST usuarios
+      operationId: usuariosPOST
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+                      
+      responses:
+        '201':
+          description: Se ha registrado el usuario {identificador} con el nombre {nombre}
+               
+        '400':
+          description: Fallo al registrar usuario
+
+  /usuarios/{identificador}:
+    get:
+      tags:
+        - usuarios
+        - identificador
+      description: GET usuario concreto
+      operationId: usuariosIdentificadorGET
+      parameters:
+        - name: identificador
+          in: path
+          required: true
+          description: Id del usuario
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Información del usuario
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trabajo'
+        '404':
+          description: No se ha encontrado ningún trabajo
+    
+    put:
+      tags:
+        - usuarios
+      description: PUT usuario
+      operationId: usuariosIdentificadorPUT
+      parameters:
+        - name: identificador
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+                  
+      responses:
+        '201':
+          description: Se ha actualizado el usuario con el identificador {identificador}
+                      
+        '400':
+          description: Fallo al actualizar usuario
+
+    delete:
+      tags:
+        - usuarios
+      description: DELETE usuario
+      operationId: usuariosIdentificadorDELETE
+      parameters:
+        - name: identificador
+          in: path
+          required: true
+          schema:
+            type: integer
+                  
+      responses:
+        '201':
+          description: Se ha eliminado el usuario con el identificador {identificador}
+   
+        '400':
+          description: Fallo al eliminar usuario
+
+  /trabajos:
+    get: 
+      tags:
+        - trabajos
+      description: GET trabajos
+      operationId: trabajosGET
+      responses:
+        '200':
+          description: Lista de trabajos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trabajo'
+        '404':
+          description: No se ha encontrado ningún trabajo
+
+    post:
+      tags:
+        - trabajos
+      description: POST trabajos
+      operationId: trabajosPOST
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trabajo'
+
+      responses:
+        '201':
+          description: Se ha registrado el trabajo {identificador} con el nombre {nombre}
+               
+        '400':
+          description: Fallo al registrar trabajo
+
+  /trabajos/{identificador}:
+    get: 
+      tags:
+        - trabajos
+        - identificador
+      description: GET trabajo concreto
+      operationId: trabajosIdentificadorGET
+      parameters:
+        - name: identificador
+          in: path
+          required: true
+          description: Id del trabajo
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Información del trabajo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trabajo'
+        '404':
+          description: No se ha encontrado ningún trabajo
+    
+    put:
+      tags:
+        - trabajos
+      description: PUT trabajo
+      operationId: trabajosIdentificadorPUT
+      parameters:
+        - name: identificador
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trabajo'
+                  
+      responses:
+        '201':
+          description: Se ha actualizado el trabajo con la nueva fecha y hora de salida
+
+        '400':
+          description: Fallo al actualizar trabajo
+
+    delete:
+      tags:
+        - trabajos
+      description: DELETE trabajo
+      operationId: trabajosIdentificadorDELETE
+      parameters:
+        - name: identificador
+          in: path
+          required: true
+          schema:
+            type: integer
+                  
+      responses:
+        '201':
+          description: Se ha eliminado el trabajo con el identificador {identificador}
+   
+        '400':
+          description: Fallo al eliminar trabajo
+
+  /fichajes:   
+    get: 
+      tags:
+        - fichajes
+      description: GET fichajes
+      operationId: fichajesGET
+      responses:
+        '200':
+          description: Lista de fichajes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Fichaje'
+        '404':
+          description: No se ha encontrado ningún fichaje
+
+    post:
+      tags:
+        - fichajes
+      description: POST fichaje
+      operationId: fichajesPOST
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Fichaje'
+                  
+                  
+      responses:
+        '201':
+          description: Se ha registrado el fichaje {idTrabajo} con el usuario Paco
+      
+                      
+        '400':
+          description: Fallo al registrar fichaje
+
+  /fichajes/{identificador}:
+    get: 
+      tags:
+        - fichajes
+      description: GET fichaje especifico
+      operationId: fichajesIdentificadorGET
+      parameters:
+        - name: identificador
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Fichaje obtenido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fichaje'
+
+        "404":
+          description: Fichaje no encontrado    
+    
+
+    put:
+      tags:
+        - fichajes
+      description: POST fichaje
+      operationId: fichajesIdentificadorPUT
+      parameters:
+        - name: identificador
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Fichaje'
+                  
+      responses:
+        '201':
+          description: Se ha actualizado el fichaje con la nueva fecha y hora de salida
+      
+                      
+        '400':
+          description: Fallo al actualizar fichaje
+
+    delete:
+      tags:
+        - fichajes
+      description: DELETE fichaje
+      operationId: fichajesIdentificadorDELETE
+      parameters:
+        - name: identificador
+          in: path
+          required: true
+          schema:
+            type: integer
+                  
+      responses:
+        '201':
+          description: Se ha eliminado el fichaje con el identificador {identificador}
+   
+        '400':
+          description: Fallo al eliminar fichaje
+
+
+  /apikey:   
+    get: 
+      tags:
+        - apikey
+      description: GET apikey
+      operationId: apikeyGET
+      responses:
+        '200':
+          description: Lista de apikeys
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiKey'
+        '404':
+          description: No se ha encontrado ningún apikey
+
+    post:
+      tags:
+        - apikey
+      description: POST apikey
+      operationId: apikeyPOST
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiKey'
+                  
+                  
+      responses:
+        '201':
+          description: Se ha registrado el apikey {idTrabajo} con el usuario Paco
+      
+                      
+        '400':
+          description: Fallo al registrar apikey
+
+  /apikey/{identificador}:
+    get: 
+      tags:
+        - apikey
+      description: GET apikey especifica
+      operationId: apikeyIdentificadorGET
+      parameters:
+        - name: identificador
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Apikey obtenido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKey'
+
+        "404":
+          description: Apikey no encontrada
+
+
+    put:
+      tags:
+        - apikey
+      description: POST apikey
+      operationId: apikeyIdentificadorPUT
+      parameters:
+        - name: identificador
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiKey'
+                  
+      responses:
+        '201':
+          description: Se ha actualizado el apikey con el identificador {identificador}
+
+                      
+        '400':
+          description: Fallo al actualizar apikey
+
+    delete:
+      tags:
+        - apikey
+      description: DELETE apikey
+      operationId: apikeyIdentificadorDELETE
+      parameters:
+        - name: identificador
+          in: path
+          required: true
+          schema:
+            type: integer
+                  
+      responses:
+        '201':
+          description: Se ha eliminado el apikey con el identificador {identificador}
+   
+        '400':
+          description: Fallo al eliminar apikey
+
+
+components:
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        identificador:
+          type: integer
+          nullable: false
+        nombre:
+          type: string
+          maxLength: 100
+          nullable: false
+        usuario:
+          type: string
+          maxLength: 50
+        clave:
+          type: string
+          maxLength: 50
+      
+
+    Trabajo:
+      type: object
+      properties:
+        identificador:
+          type: integer
+          nullable: false
+        nombre:
+          type: string
+          nullable: false
+          maxLength: 200
+      
+
+    ApiKey:
+      type: object
+      properties:
+        identificador:
+          type: integer
+          nullable: false
+          readOnly: true
+        key:
+          type: string
+          nullable: false
+          maxLength: 50
+      
+
+
+    Fichaje:
+      type: object
+      properties:
+        identificador:
+          type: integer
+          readOnly: true
+          nullable: false
+        fechaHoraEntrada:
+          type: string
+          format: date-time
+        fechaHoraSalida:
+          type: string
+          format: date-time
+        horasTrabajadas:
+          type: integer
+        idTrabajo:
+          type: integer
+        idUsuario:
+          type: integer
+        geoLat:
+          type: number
+          format: float
+        geoLong: 
+          type: number
+          format: float
+      
+
+    
+
+        
+          
+    

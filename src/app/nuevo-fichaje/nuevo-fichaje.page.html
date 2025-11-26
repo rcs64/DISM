@@ -1,0 +1,47 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Nuevo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <section id="crearFichaje">
+    <ion-item>
+      <ion-select (ionChange)="cambiarTrabajoSeleccionado()" [(ngModel)]="idTrabajoSeleccionado" label="Trabajo" placeholder="Nombre del trabajo">
+        @for (item of TrabajosData; track item.identificador) {
+          <ion-select-option [value]="item.identificador">{{ item.nombre }}</ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-margin-end">FechaHoraEntrada:</ion-label>
+      <ion-input [(ngModel)]="FichajeData.fechaHoraEntrada" placeholder="FechaHoraEntrada"></ion-input>
+      <ion-button color="danger" (click)="ponerHoraActualEntrada()">
+        <ion-icon name="time"></ion-icon>
+      </ion-button>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-margin-end">geoLat:</ion-label>
+      <ion-input readonly="true" [(ngModel)]="FichajeData.geoLat" placeholder="geoLat"></ion-input>
+      <ion-button (click)="locate()">
+        <ion-icon name="location"></ion-icon>
+      </ion-button>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-margin-end">geoLong:</ion-label>
+      <ion-input readonly="true" [(ngModel)]="FichajeData.geoLong" placeholder="geoLong"></ion-input>
+      <ion-button (click)="locate()">
+        <ion-icon name="location"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </section>
+  <section id="terminarFichaje" display="none">
+    <ion-button (click)="terminarFichaje(false)" expand="block" color="primary">
+      ¿Finalizar fichaje?
+    </ion-button>
+  </section>
+    
+
+  <ion-button id="nuevoFichaje" (click)="nuevoFichaje()" color="success" expand="block">Añadir</ion-button>
+  <ion-button [routerLink]="['/inicio']" color="warning" expand="block">Cancelar</ion-button>
+</ion-content>

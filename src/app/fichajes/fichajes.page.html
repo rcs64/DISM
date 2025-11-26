@@ -1,0 +1,53 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Listado fichajes
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-input type="number" [(ngModel)]="dia"></ion-input>
+    <ion-button (click)="filtrarPorDia(); formatearHora();">
+      Filtrar por día
+    </ion-button>
+  </ion-item>
+
+  <div id="mapId" style="height: 300px; width: 100%; margin-bottom: 1em;"></div>
+
+  <ion-list id="fichajes-list">
+    @for (item of FichajesDataHoy; track item.identificador) {
+      <ion-item>
+        <ion-toggle [checked]="true" (click)="toggleMarcador(`${item.identificador}`);">
+        </ion-toggle>
+        <ion-label>
+          <table style="text-align: left;">
+            <tr>
+              <th style="padding-right: 1em;">'Fecha-Hora de entrada'</th>
+              <td>{{ item.fechaHoraEntrada }}</td>
+            </tr>
+            <tr>
+              <th style="padding-right: 1em;">'Fecha-Hora de salida'</th>
+              <td>{{ item.fechaHoraSalida }}</td>
+            </tr>
+            <tr>
+              <th style="padding-right: 1em;">'Id del trabajo'</th>
+              <td>{{ item.idTrabajo }}</td>
+            </tr>
+            <tr>
+              <th style="padding-right: 1em;">'Localización'</th>
+              <td>{{ item.geoLat.toFixed(5) }}, {{ item.geoLong.toFixed(5) }}</td>
+            </tr>
+          </table>
+        </ion-label>
+      </ion-item>
+    } @empty {
+      <ion-item>
+        <ion-label>No hay trabajos disponibles</ion-label>
+      </ion-item>
+    }
+  </ion-list>
+
+  <ion-button [routerLink]="['/inicio']" expand="block">Volver</ion-button>
+</ion-content>
