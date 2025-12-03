@@ -5,23 +5,73 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-item>
+  <section *ngIf="tipoObjeto === 'usuario'"> <!-- *ngIf hace que se muestra si se da una condicion, en este caso si tipoObjeto === algo. Porque al hacerlo con css display none me estaba dando problemas todo el rato -->
+    <ion-item>
     <ion-label>Id:</ion-label>
-    <ion-input [(ngModel)]="UsuarioData.identificador" placeholder="IdUsuario"></ion-input>
+    <ion-input [(ngModel)]="UsuarioData.identificador" placeholder="Id"></ion-input>
   </ion-item>
   <ion-item>
     <ion-label>Nombre:</ion-label>
-    <ion-input [(ngModel)]="UsuarioData.nombre" placeholder="Nombre"></ion-input>
+    <ion-input [(ngModel)]="UsuarioData.nombre" placeholder="nombre"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-label>Edad:</ion-label>
-    <ion-input [(ngModel)]="UsuarioData.usuario" placeholder="Usuario"></ion-input>
+    <ion-label>Nombre de usuario:</ion-label>
+    <ion-input [(ngModel)]="UsuarioData.usuario" placeholder="usuario"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-label>Email:</ion-label>
-    <ion-input [(ngModel)]="UsuarioData.clave" placeholder="Clave"></ion-input>
+    <ion-label>Contraseña:</ion-label>
+    <ion-input [(ngModel)]="UsuarioData.clave" placeholder="clave"></ion-input>
   </ion-item>
+  <ion-item>
+    <ion-label>Privilegios de administrador:</ion-label>
+    <ion-input [(ngModel)]="UsuarioData.isAdmin" placeholder="isAdmin"></ion-input>
+  </ion-item>
+  </section>
+  <section *ngIf="tipoObjeto === 'fichaje'">
+    <ion-item>
+      <ion-label>Id:</ion-label>
+      <ion-input [(ngModel)]="FichajeData.identificador" placeholder="Id" readonly></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Fecha-hora Entrada:</ion-label>
+      <ion-input [(ngModel)]="FichajeData.fechaHoraEntrada" placeholder="Fecha-hora Entrada"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Fecha-hora Salida:</ion-label>
+      <ion-input [(ngModel)]="FichajeData.fechaHoraSalida" placeholder="Fecha-hora Salida"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Horas trabajadas:</ion-label>
+      <ion-input [(ngModel)]="FichajeData.horasTrabajadas" placeholder="Horas trabajadas" type="number"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Id del trabajo:</ion-label>
+      <ion-input [(ngModel)]="FichajeData.idTrabajo" placeholder="Id del trabajo" type="number"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Id del usuario:</ion-label>
+      <ion-input [(ngModel)]="FichajeData.idUsuario" placeholder="Id del usuario" type="number"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Latitud:</ion-label>
+      <ion-input [(ngModel)]="FichajeData.geoLat" placeholder="Latitud" type="number"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Longitud:</ion-label>
+      <ion-input [(ngModel)]="FichajeData.geoLong" placeholder="Longitud" type="number"></ion-input>
+    </ion-item>
+  </section>
+  <section *ngIf="tipoObjeto === 'trabajo'">
+    <ion-item>
+      <ion-label>Id:</ion-label>
+      <ion-input [(ngModel)]="TrabajoData.identificador" placeholder="Id"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Nombre:</ion-label>
+      <ion-input [(ngModel)]="TrabajoData.nombre" placeholder="Nombre del trabajo"></ion-input>
+    </ion-item>
+  </section>
 
   <ion-button (click)="update()" color="success" expand="block">Actualizar</ion-button>
-  <ion-button [routerLink]="['/home']" color="warning" expand="block">Cancelar</ion-button>
+  <ion-button [routerLink]="['/inicio-admin']" color="warning" expand="block">Cancelar</ion-button>
 </ion-content>

@@ -4,6 +4,7 @@ import { Usuario } from '../models/usuario';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { Fichaje } from '../models/fichaje';
+import { Trabajo } from '../models/trabajo';
 
 @Injectable({
   providedIn: 'root'
@@ -31,16 +32,12 @@ export class ApiService {
         `Body: ${error.error}`
       );
     }
-    return throwError(() => new Error('Ha sucedido un problema, inténtalo más tarde'));
+    // Re-emit the original HttpErrorResponse so callers can inspect status/code
+    return throwError(() => error);
   }
 
   // Usuario
-
-  getAllUsuarios(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(this.basePath + 'usuarios').pipe(retry(2), catchError(this.handleError));
-  }
-
-  createItem(item: Usuario): Observable<Usuario> {
+  createUsuario(item: Usuario): Observable<Usuario> {
     return this.http.post<Usuario>(this.basePath + 'usuarios/', JSON.stringify(item), this.httpOptions).pipe(retry(2), catchError(this.handleError));
   }
 
@@ -48,16 +45,20 @@ export class ApiService {
     return this.http.get<Usuario>(this.basePath + 'usuarios/' + id).pipe(retry(2), catchError(this.handleError));
   }
 
-  getList(): Observable<Usuario[]> {
+  getAllUsuarios(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(this.basePath + 'usuarios/').pipe(retry(2), catchError(this.handleError));
   }
 
-  updateItem(item: Usuario): Observable<Usuario> {
-    console.log("UPDATE: " + JSON.stringify(item));
-    return this.http.put<Usuario>(this.basePath + 'usuarios/' + item.identificador, JSON.stringify(item), this.httpOptions).pipe(retry(2), catchError(this.handleError));
+  updateUsuario(id: number, item: any): Observable<any> {
+    return this.http.put<any>(this.basePath + 'usuarios/' + id, JSON.stringify(item), this.httpOptions).pipe(catchError(this.handleError));
   }
 
-  deleteItem(id: number): Observable<Usuario> {
+  // usuarios/nombre/{usuario}
+  getUsuarioNombre(nombre: string): Observable<any> {
+    return this.http.get<any>(this.basePath + 'usuarios/nombre/' + encodeURIComponent(nombre)).pipe(retry(2), catchError(this.handleError));
+  }
+
+  deleteUsuario(id: number): Observable<Usuario> {
     return this.http.delete<Usuario>(this.basePath + 'usuarios/' + id, this.httpOptions).pipe(retry(2), catchError(this.handleError));
   }
 
@@ -67,7 +68,7 @@ export class ApiService {
   }
 
   getAllFichajes(): Observable<Fichaje[]> {
-    return this.http.get<Fichaje[]>(this.basePath + 'fichajes').pipe(retry(2), catchError(this.handleError));
+    return this.http.get<Fichaje[]>(this.basePath + 'fichajes/').pipe(retry(2), catchError(this.handleError));
   }
 
   getFichajesUsuario(idUsuario: number): Observable<Fichaje[]> {
@@ -80,16 +81,35 @@ export class ApiService {
     return this.http.get<any>(this.basePath + 'fichajes/' + id).pipe(retry(2), catchError(this.handleError));
   }
 
-  updateFichaje(id: number, item: Fichaje): Observable<any> {
-    return this.http.put<any>(this.basePath + 'fichajes/' + id, JSON.stringify(item), this.httpOptions).pipe(retry(2), catchError(this.handleError));
+  updateFichaje(id: number, item: any, admin: number): Observable<any> {
+    const body = { ...item, admin }; // necesito anyadir el admin al json
+    return this.http.put<any>(this.basePath + 'fichajes/' + id, JSON.stringify(body), this.httpOptions).pipe(catchError(this.handleError));
+  }
+
+  deleteFichaje(id: number): Observable<Fichaje> {
+    return this.http.delete<Fichaje>(this.basePath + 'fichajes/' + id, this.httpOptions).pipe(retry(2), catchError(this.handleError));
   }
 
   // Trabajo
-  getAllTrabajos(): Observable<any[]> {
-    return this.http.get<any[]>(this.basePath + 'trabajos').pipe(retry(2), catchError(this.handleError));
+  getAllTrabajos(): Observable<Trabajo[]> {
+    return this.http.get<Trabajo[]>(this.basePath + 'trabajos/').pipe(retry(2), catchError(this.handleError));
   }
 
   getTrabajo(id: number): Observable<any> {
     return this.http.get<any>(this.basePath + 'trabajos/' + id).pipe(retry(2), catchError(this.handleError));
+  }
+
+  createTrabajo(item: Trabajo): Observable<Trabajo> {
+    return this.http.post<Trabajo>(this.basePath + 'trabajos/', JSON.stringify(item), this.httpOptions).pipe(retry(2), catchError(this.handleError));
+  }
+
+
+  // Trabajo/{id}
+  updateTrabajo(id: number, item: any): Observable<any> {
+    return this.http.put<any>(this.basePath + 'trabajos/' + id, JSON.stringify(item), this.httpOptions).pipe(catchError(this.handleError));
+  }
+
+  deleteTrabajo(id: number): Observable<Trabajo> {
+    return this.http.delete<Trabajo>(this.basePath + 'trabajos/' + id, this.httpOptions).pipe(retry(2), catchError(this.handleError));
   }
 }

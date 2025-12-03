@@ -8,6 +8,10 @@
 
 const Controller = require('./Controller');
 const service = require('../services/UsuariosService');
+const usuariosByNombreGET = async (request, response) => {
+  await Controller.handleRequest(request, response, service.usuariosByNombreGET);
+};
+
 const usuariosGET = async (request, response) => {
   await Controller.handleRequest(request, response, service.usuariosGET);
 };
@@ -30,6 +34,7 @@ const usuariosPOST = async (request, response) => {
 
 
 module.exports = {
+  usuariosByNombreGET,
   usuariosGET,
   usuariosIdentificadorDELETE,
   usuariosIdentificadorGET,

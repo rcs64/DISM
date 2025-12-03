@@ -3,5 +3,5 @@ export class Usuario {
     nombre: string = "";
     usuario: string = "";
     clave: string = "";
-    esAdmin: number = 0;
+    isAdmin: number = 0;
 }

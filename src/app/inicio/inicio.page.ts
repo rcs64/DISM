@@ -15,30 +15,19 @@ import { ApiService } from '../services/api';
   imports: [IonContent, RouterLink, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuButton, IonButton, IonItem, IonSelect, IonSelectOption, IonModal]
 })
 export class InicioPage implements OnInit {
-idUsuario: number = -1;
+idUsuario: number = sessionStorage['idUsuario'];
 UsuariosData: Usuario[] = [];
 usuario: Usuario = new Usuario();
-esAdmin: number = 0;
 
   constructor(public apiService: ApiService, private router: Router) { }
 
   ngOnInit() {
-    this.getAllUsuarios();
-    this.comprobarAdmin();
+    // this.getAllUsuarios();
   }
 
-  guardarUserEnSesion() {
-    sessionStorage.setItem('idUsuario', `${this.idUsuario}`); // guardo el userid en la sesión
-  }
+  
 
-  comprobarAdmin() {
-    if(this.esAdmin  == 1){
-      console.log('aaaaaaaaaaaa');
-      this.router.navigate(['/inicio-admin']);
-    }
-  }
-
-  getAllUsuarios() {
+  /* getAllUsuarios() {
     this.apiService.getAllUsuarios().subscribe({
       next: (response: Usuario[]) => { 
         this.UsuariosData = response; 
@@ -51,6 +40,6 @@ esAdmin: number = 0;
         console.error('Error al obtener usuarios:', err); 
       }
     });
-  }
+  } */
 
 }

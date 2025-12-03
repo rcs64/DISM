@@ -5,5 +5,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-button (click)="guardarUserEnSesion();" [routerLink]="['/fichajes']" color="primary" expand="block">Gestión Fichajes</ion-button>
+  <ion-button (click)="guardarUserEnSesion('usuario');" [routerLink]="['/listado-admin']" color="primary" expand="block">Gestión Usuarios</ion-button>
+  <ion-button (click)="guardarUserEnSesion('fichaje');" [routerLink]="['/listado-admin']" color="primary" expand="block">Gestión Fichajes</ion-button>
+  <ion-button (click)="guardarUserEnSesion('trabajo');" [routerLink]="['/listado-admin']" color="primary" expand="block">Gestión Trabajos</ion-button>
 </ion-content>

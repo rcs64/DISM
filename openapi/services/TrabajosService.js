@@ -8,20 +8,22 @@ const mysql = require('mysql2/promise');
 
 // tambien dice algo de prepared statements para evitar inyeccion sql por parte de atacantes, pero la práctica no pide nada así, conque paso
 
-let conexion; // aqui guardo la conexion a la base de datos para no tener que hacer mysqlcreateConnection para cada peticion a la base de datos
+let pool; // aqui guardo la pool a la base de datos para no tener que hacer mysqlcreateConnection para cada peticion a la base de datos
 
-const conseguirConexion = async () => { // esta funcion solo la necesito porque al parecer hay dos formas de importar módulos de nodejs y openapi usa algo llamdo CommonJS y lo de la página de la que he sacado las referencias se usa ES Modules, conque la notación cambia y tengo que usar los awaits siempre dentro de async
+const conseguirpool = async () => { // esta funcion solo la necesito porque al parecer hay dos formas de importar módulos de nodejs y openapi usa algo llamdo CommonJS y lo de la página de la que he sacado las referencias se usa ES Modules, conque la notación cambia y tengo que usar los awaits siempre dentro de async
 
-  if(!conexion) {// si aun no he hecho la conexion a la base de datos, la hago
-    conexion = await mysql.createConnection({
+  if(!pool) {// si aun no he hecho la pool a la base de datos, la hago
+    pool = mysql.createPool({
       host: 'localhost',
       user: 'root',
       password: '',
       database: 'dism',
+      connectionLimit: 10,
+      waitForConnections: true
     }); 
   }
 
-  return conexion;
+  return pool;
 }
 
 /**
@@ -32,9 +34,9 @@ const conseguirConexion = async () => { // esta funcion solo la necesito porque 
 const trabajosGET = () => new Promise(
   async (resolve, reject) => {
     try {
-      await conseguirConexion(); // por si aun no he hecho la conexion a la base de datos en otra peticion previa. Esto lo voy a poner en todas las peticiones, si ya existe no consume mucho proceso porque no entra en el if.
+      await conseguirpool(); // por si aun no he hecho la conexion a la base de datos en otra peticion previa. Esto lo voy a poner en todas las peticiones, si ya existe no consume mucho proceso porque no entra en el if.
       
-      const [filas] = await conexion.query('SELECT * FROM trabajos');
+      const [filas] = await pool.execute('SELECT * FROM trabajos');
       resolve(Service.successResponse(
         filas,
       ));
@@ -55,8 +57,8 @@ const trabajosGET = () => new Promise(
 const trabajosIdentificadorDELETE = ({ identificador }) => new Promise(
   async (resolve, reject) => {
     try {
-      await conseguirConexion();
-      await conexion.query(`DELETE FROM trabajos WHERE identificador = ${identificador}`);
+      await conseguirpool();
+      await pool.execute(`DELETE FROM trabajos WHERE identificador = ${identificador}`);
       resolve(Service.successResponse({
         message: `Se ha eliminado el trabajo con el identificador ${identificador}`,
       }));
@@ -68,6 +70,7 @@ const trabajosIdentificadorDELETE = ({ identificador }) => new Promise(
     }
   },
 );
+
 /**
 * GET trabajo concreto
 *
@@ -95,9 +98,12 @@ const trabajosIdentificadorGET = ({ identificador }) => new Promise(
 * trabajo Trabajo 
 * no response value expected for this operation
 * */
-const trabajosIdentificadorPUT = ({ identificador, trabajo }) => new Promise(
+const trabajosIdentificadorPUT = ({ identificador, body }) => new Promise(
   async (resolve, reject) => {
     try {
+      await conseguirpool(); // por si aun no he hecho la pool a la base de datos en otra peticion previa. Esto lo voy a poner en todas las peticiones, si ya existe no consume mucho proceso porque no entra en el if.
+      const trabajo = body;
+      await pool.execute('UPDATE trabajos SET identificador = ?, nombre = ? WHERE identificador = ?', [trabajo.nuevoID, trabajo.nombre, identificador]);
       resolve(Service.successResponse({
         identificador,
         trabajo,
@@ -110,28 +116,23 @@ const trabajosIdentificadorPUT = ({ identificador, trabajo }) => new Promise(
     }
   },
 );
+
 /**
 * POST trabajos
 *
 * trabajo Trabajo 
 * no response value expected for this operation
 * */
-const trabajosPOST = ({ trabajo }) => new Promise(
+const trabajosPOST = ({ body }) => new Promise(
   async (resolve, reject) => {
     try {
-      /*
-        OPENAPI ME PASA EL OBJETO FICHAJE ASÍ, NO SÉ POR QUÉ, TOCA HACERLO ASÍ AUNQUE IONIC LO PASASE BIEN.
-        KEYS DE PARAMS: [ 'body' ]
-        PARAMS COMPLETOS: {
-          "body": {
-            "fechaHoraEntrada": "...",
-            ...
-          }
-        }
-      */
       const trabajo = body;
-      await conseguirConexion();
-      await conexion.query(`INSERT INTO trabajos (nombre) VALUES ('${trabajo.nombre}')`);
+      await conseguirpool();
+
+      let id = parseInt(trabajo.identificador);
+      
+      
+      await pool.execute(`INSERT INTO trabajos (identificador, nombre) VALUES (?, ?)`, [id, trabajo.nombre]);
       resolve(Service.successResponse({
         message: 'Trabajo creado correctamente'
       }));

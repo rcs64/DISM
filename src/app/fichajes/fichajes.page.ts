@@ -141,12 +141,7 @@ export class FichajesPage {
       }
     });
   }
-  deleteFichaje(item: Fichaje) {
-    this.apiService.deleteItem(item.identificador).subscribe({
-      next: () => this.getAllFichajesUsuario(),
-      error: (err) => { console.error('Error al eliminar fichaje:', err); }
-    });
-  }
+  
   editFichaje(item: Fichaje) {
     this.nav.navigateForward('editar', { state: { item } });
   }

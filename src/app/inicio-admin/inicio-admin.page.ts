@@ -19,8 +19,9 @@ export class InicioAdminPage implements OnInit {
   ngOnInit() {
   }
 
-  guardarUserEnSesion() {
+  guardarUserEnSesion(tipoObjeto: string) {
     sessionStorage.setItem('idUsuario', `${this.idUsuario}`); // guardo el userid en la sesión
+    sessionStorage.setItem('Tipo de objeto', `${tipoObjeto}`); // guardo el userid en la sesión
   }
 
 }

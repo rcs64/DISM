@@ -21,13 +21,13 @@
     </ng-template>
   </ion-modal>
 
-  <ion-item>
+  <!-- <ion-item>
       <ion-select [(ngModel)]="idUsuario" (ionChange)="guardarUserEnSesion(); comprobarAdmin();" label="Usuario" placeholder="Usuario">
         @for (item of UsuariosData; track item.identificador) {
           <ion-select-option [value]="item.identificador">{{ item.nombre }}</ion-select-option>
         }
       </ion-select>
-  </ion-item>
-  <ion-button (click)="guardarUserEnSesion();" [routerLink]="['/nuevo-fichaje']" color="primary" expand="block">Registrar fichaje</ion-button>
-  <ion-button (click)="guardarUserEnSesion();" [routerLink]="['/fichajes']" color="primary" expand="block">Consulta fichajes</ion-button>
+  </ion-item> -->
+  <ion-button [routerLink]="['/nuevo-fichaje']" color="primary" expand="block">Registrar fichaje</ion-button>
+  <ion-button [routerLink]="['/fichajes']" color="primary" expand="block">Consulta fichajes</ion-button>
 </ion-content>

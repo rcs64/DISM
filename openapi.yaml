@@ -53,14 +53,14 @@ paths:
       description: GET usuario concreto por nombre
       operationId: usuariosByNombreGET
       parameters:
-      - description: Nombre del usuario
-        explode: false
-        in: path
-        name: usuario
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: Nombre del usuario
+          explode: false
+          in: path
+          name: usuario
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
         "200":
           content:
@@ -71,7 +71,7 @@ paths:
         "404":
           description: No se ha encontrado ningún usuario con ese nombre
       tags:
-      - usuarios
+        - usuarios
       x-eov-operation-handler: controllers/UsuariosController
   /usuarios/{identificador}:
     delete:
@@ -286,6 +286,7 @@ paths:
       tags:
       - fichajes
       x-eov-operation-handler: controllers/FichajesController
+
   /fichajes/usuario/{idUsuario}:
     get:
       description: GET fichajes por usuario
@@ -312,6 +313,7 @@ paths:
       tags:
       - fichajes
       x-eov-operation-handler: controllers/FichajesController
+  
   /fichajes/{identificador}:
     delete:
       description: DELETE fichaje
@@ -506,10 +508,10 @@ components:
           maxLength: 50
           type: string
         esAdmin:
-          default: 0
-          maximum: 1
-          minimum: 0
           type: integer
+          minimum: 0
+          maximum: 1
+          default: 0
       type: object
     Trabajo:
       example:
@@ -556,8 +558,8 @@ components:
         fechaHoraEntrada:
           type: string
         fechaHoraSalida:
-          nullable: true
           type: string
+          nullable: true
         horasTrabajadas:
           type: number
         idTrabajo:

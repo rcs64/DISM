@@ -46,7 +46,7 @@ export class NuevoFichajePage implements OnInit {
     nombre: '',
     usuario: '',
     clave: '',
-    esAdmin: 0
+    isAdmin: 0
   };
 
   constructor(
@@ -224,7 +224,7 @@ export class NuevoFichajePage implements OnInit {
       geoLong: this.FichajeData.geoLong
     }
 
-    this.apiService.updateFichaje(identificador, data).subscribe({
+    this.apiService.updateFichaje(identificador, data, 0).subscribe({
       next: () => {
         if(tarde)
           this.router.navigate(['nuevo-fichaje']);

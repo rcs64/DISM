@@ -7,14 +7,27 @@
         </ion-toolbar>
       </ion-header>
       <ion-content>
-        <ion-list>
-          <ion-menu-toggle auto-hide="false">
+        <section id="logout" style="display:none">
+          <ion-item>
+            <ion-text><h2>Bienvenido, {{ this.UsuarioData.nombre }}</h2></ion-text>
+          </ion-item>
+          <ion-button (click)="logout();">Cerrar sesión</ion-button>
+        </section>
+        <section id="login">
+          <ion-list>
             <ion-item>
-              <ion-input [(ngModel)]="nombreUsuario" label="Input with placeholder" placeholder="Enter company name"></ion-input>
-              <ion-input [(ngModel)]="pass" label="Input with placeholder" placeholder="Enter company name"></ion-input>
+              <ion-input [(ngModel)]="nombreUsuario" label="Nombre de usuario"></ion-input>
             </ion-item>
-          </ion-menu-toggle>
-        </ion-list>
+            <ion-item>
+              <ion-input [(ngModel)]="pass" label="Contraseña" type="password"></ion-input>
+            </ion-item>
+            <ion-item lines="none">
+              <div>
+                <ion-button (click)="login();">Confirmar</ion-button>
+              </div>
+            </ion-item>
+          </ion-list>
+        </section>
       </ion-content>
     </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>

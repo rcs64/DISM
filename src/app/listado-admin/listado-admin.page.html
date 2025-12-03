@@ -1,0 +1,96 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Listado Usuarios
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <section display="none" id="usuario">
+    <ion-list>
+      @for (item of UsuarioData; track item.identificador) {
+        <ion-item>
+          <ion-label>
+            <h2>Id: {{ item.identificador }}</h2>
+            <h2>Nombre: {{ item.nombre }}</h2>
+            <p>Nombre de usuario: {{ item.usuario }}</p>
+            <p>Contraseña: {{ item.clave }}</p>
+            <p>Privilegios de admin: {{ item.isAdmin }}</p>
+          </ion-label>
+          <ion-button (click)="edit(item)" color="warning" size="small">
+            <ion-icon name="create"></ion-icon>
+          </ion-button>
+          <ion-button (click)="deleteUsuario(item)" color="danger" size="small">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </ion-item>
+      } @empty {
+        <ion-item>
+          <ion-label>No hay usuarios disponibles</ion-label>
+        </ion-item>
+      }
+    </ion-list>
+    <ion-button [routerLink]="['/crear-admin']" expand="block">
+      Nuevo Usuario
+    </ion-button>
+  </section>
+  <section display="none" id="fichaje"> 
+    <ion-list>
+      @for (item of FichajeData; track item.identificador) {
+        <ion-item>
+          <ion-label>
+            <h2>Id: {{ item.identificador }}</h2>
+            <h2>Fecha-hora Entrada: {{ item.fechaHoraEntrada }}</h2>
+            <h2>Fecha-hora Salida: {{ item.fechaHoraSalida }}</h2>
+            <p>Horas trabajadas: {{ item.horasTrabajadas }}</p>
+            <p>Id del trabajo: {{ item.idTrabajo }}</p>
+            <p>Id del usuario: {{ item.idUsuario }}</p>
+            <p>Latitud: {{ item.geoLat }}</p>
+            <p>Longitud: {{ item.geoLong }}</p>
+          </ion-label>
+          <ion-button (click)="edit(item)" color="warning" size="small">
+            <ion-icon name="create"></ion-icon>
+          </ion-button>
+          <ion-button (click)="deleteFichaje(item)" color="danger" size="small">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </ion-item>
+      } @empty {
+        <ion-item>
+          <ion-label>No hay fichajes disponibles</ion-label>
+        </ion-item>
+      }
+    </ion-list>
+  </section>
+  <section display="none" id="trabajo">
+    <ion-list>
+      @for (item of TrabajoData; track item.identificador) {
+        <ion-item>
+          <ion-label>
+            <h2>Id: {{ item.identificador }}</h2>
+            <p>Trabajo: {{ item.nombre }}</p>
+          </ion-label>
+          <ion-button (click)="edit(item)" color="warning" size="small">
+            <ion-icon name="create"></ion-icon>
+          </ion-button>
+          <ion-button (click)="deleteTrabajo(item)" color="danger" size="small">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </ion-item>
+      } @empty {
+        <ion-item>
+          <ion-label>No hay trabajos disponibles</ion-label>
+        </ion-item>
+      }
+    </ion-list>
+    <ion-button [routerLink]="['/crear-admin']" expand="block">
+      Nuevo Trabajo
+    </ion-button>
+  </section>
+  
+
+  <ion-button [routerLink]="['/inicio-admin']" expand="block">
+    Volver
+  </ion-button>
+</ion-content>

@@ -8,20 +8,22 @@ const mysql = require('mysql2/promise');
 
 // tambien dice algo de prepared statements para evitar inyeccion sql por parte de atacantes, pero la práctica no pide nada así, conque paso
 
-let conexion; // aqui guardo la conexion a la base de datos para no tener que hacer mysqlcreateConnection para cada peticion a la base de datos
+let pool; // aqui guardo la pool a la base de datos para no tener que hacer mysqlcreateConnection para cada peticion a la base de datos
 
-const conseguirConexion = async () => { // esta funcion solo la necesito porque al parecer hay dos formas de importar módulos de nodejs y openapi usa algo llamdo CommonJS y lo de la página de la que he sacado las referencias se usa ES Modules, conque la notación cambia y tengo que usar los awaits siempre dentro de async
+const conseguirpool = async () => { // esta funcion solo la necesito porque al parecer hay dos formas de importar módulos de nodejs y openapi usa algo llamdo CommonJS y lo de la página de la que he sacado las referencias se usa ES Modules, conque la notación cambia y tengo que usar los awaits siempre dentro de async
 
-  if(!conexion) {// si aun no he hecho la conexion a la base de datos, la hago
-    conexion = await mysql.createConnection({
+  if(!pool) {// si aun no he hecho la pool a la base de datos, la hago
+    pool = mysql.createPool({
       host: 'localhost',
       user: 'root',
       password: '',
       database: 'dism',
+      connectionLimit: 10,
+      waitForConnections: true
     }); 
   }
 
-  return conexion;
+  return pool;
 }
 
 /**
@@ -32,9 +34,9 @@ const conseguirConexion = async () => { // esta funcion solo la necesito porque 
 const fichajesGET = () => new Promise(
   async (resolve, reject) => {
     try {
-      await conseguirConexion(); // por si aun no he hecho la conexion a la base de datos en otra peticion previa. Esto lo voy a poner en todas las peticiones, si ya existe no consume mucho proceso porque no entra en el if.
+      await conseguirpool(); // por si aun no he hecho la pool a la base de datos en otra peticion previa. Esto lo voy a poner en todas las peticiones, si ya existe no consume mucho proceso porque no entra en el if.
       
-      const [filas] = await conexion.query('SELECT * FROM fichajes');
+      const [filas] = await pool.execute('SELECT * FROM fichajes');
       resolve(Service.successResponse(
         filas,
       ));
@@ -56,8 +58,8 @@ const fichajesGET = () => new Promise(
 const fichajesUsuarioGET = ({ idUsuario }) => new Promise(
   async (resolve, reject) => {
     try {
-      await conseguirConexion();
-      const [filas] = await conexion.query(`SELECT * FROM fichajes WHERE idUsuario = ${idUsuario}`);
+      await conseguirpool();
+      const [filas] = await pool.execute(`SELECT * FROM fichajes WHERE idUsuario = ${idUsuario}`);
       resolve(Service.successResponse(
         filas,
       ));
@@ -79,8 +81,8 @@ const fichajesUsuarioGET = ({ idUsuario }) => new Promise(
 const fichajesIdentificadorDELETE = ({ identificador }) => new Promise(
   async (resolve, reject) => {
     try {
-      await conseguirConexion();
-      await conexion.query(`DELETE FROM fichajes WHERE identificador = ${identificador}`);
+      await conseguirpool();
+      await pool.execute(`DELETE FROM fichajes WHERE identificador = ${identificador}`);
       resolve(Service.successResponse({
         message: `Se ha eliminado el fichaje con el identificador ${identificador}`,
       }));
@@ -103,8 +105,8 @@ const fichajesIdentificadorDELETE = ({ identificador }) => new Promise(
 const fichajesIdentificadorGET = ({ identificador }) => new Promise(
   async (resolve, reject) => {
     try {
-      await conseguirConexion();
-      const [filas] = await conexion.query(`SELECT * FROM fichajes WHERE identificador = ${identificador}`);
+      await conseguirpool();
+      const [filas] = await pool.execute(`SELECT * FROM fichajes WHERE identificador = ${identificador}`);
       const fila = filas[0];  // solo hay un objeto en la consulta (una fila) y es el que paso
       if(fila) {
         resolve(Service.successResponse(
@@ -138,18 +140,26 @@ const fichajesIdentificadorPUT = ({ identificador, body }) => new Promise(
       console.log('PUT recibido - identificador:', identificador);
       console.log('PUT recibido - body:', JSON.stringify(body, null, 2));
       const fichaje = body;
-      await conseguirConexion();
+      await conseguirpool();
       
       // Convertir la fecha ISO a formato MySQL compatible
       const fechaSalida = new Date(fichaje.fechaHoraSalida).toISOString().slice(0, 19).replace('T', ' ');
       
-      const query = `UPDATE fichajes 
-        SET 
-        fechaHoraSalida = '${fechaSalida}',
-        horasTrabajadas = ${fichaje.horasTrabajadas}
-        WHERE identificador = ${identificador}`;
-      console.log('Query SQL:', query);
-      await conexion.query(query);
+      if(body.admin === 0) {
+        const query = `UPDATE fichajes 
+          SET 
+          fechaHoraSalida = ?,
+          horasTrabajadas = ?
+          WHERE identificador = ?`;
+        console.log('Query SQL:', query);
+        await pool.execute(query, [fechaSalida, fichaje.horasTrabajadas, identificador]);
+      }
+      else {
+        // Admin: puede actualizar todos los campos
+        const query = `UPDATE fichajes SET fechaHoraEntrada = ?, fechaHoraSalida = ?, horasTrabajadas = ?, idTrabajo = ?, idUsuario = ?, geoLat = ?, geoLong = ? WHERE identificador = ?`;
+        await pool.execute(query, [fichaje.fechaHoraEntrada, fechaSalida, fichaje.horasTrabajadas, fichaje.idTrabajo, fichaje.idUsuario, fichaje.geoLat, fichaje.geoLong, identificador]);
+      }
+
       resolve(Service.successResponse({
         message: `Se ha actualizado el fichaje con el identificador ${identificador}`,
       })); // pongo comillas en los objetos de fechas porque si no, se ralla mysql, necesita strings
@@ -182,12 +192,12 @@ const fichajesPOST = ({ body }) => new Promise(
         }
       */
       const fichaje = body;
-      await conseguirConexion();
+      await conseguirpool();
       
       // Convertir la fecha ISO a formato MySQL compatible
       const fechaEntrada = new Date(fichaje.fechaHoraEntrada).toISOString().slice(0, 19).replace('T', ' ');
       
-      await conexion.query(`INSERT INTO fichajes (fechaHoraEntrada, horasTrabajadas, idTrabajo, idUsuario, geoLat, geoLong) VALUES ('${fechaEntrada}', ${fichaje.horasTrabajadas}, ${fichaje.idTrabajo}, ${fichaje.idUsuario}, ${fichaje.geoLat}, ${fichaje.geoLong})`);
+      await pool.execute(`INSERT INTO fichajes (fechaHoraEntrada, horasTrabajadas, idTrabajo, idUsuario, geoLat, geoLong) VALUES ('${fechaEntrada}', ${fichaje.horasTrabajadas}, ${fichaje.idTrabajo}, ${fichaje.idUsuario}, ${fichaje.geoLat}, ${fichaje.geoLong})`);
       resolve(Service.successResponse({
         message: 'Fichaje creado correctamente'
       }));

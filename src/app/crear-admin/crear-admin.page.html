@@ -1,0 +1,43 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Nuevo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <section *ngIf="tipoObjeto === 'usuario'"> <!-- *ngIf hace que se muestra si se da una condicion, en este caso si tipoObjeto === algo. Porque al hacerlo con css display none me estaba dando problemas todo el rato -->
+    <ion-item>
+      <ion-label>Id:</ion-label>
+      <ion-input type="number" [(ngModel)]="UsuarioData.identificador" placeholder="Id"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Nombre:</ion-label>
+      <ion-input [(ngModel)]="UsuarioData.nombre" placeholder="nombre"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Nombre de usuario:</ion-label>
+      <ion-input [(ngModel)]="UsuarioData.usuario" placeholder="usuario"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Contraseña:</ion-label>
+      <ion-input [(ngModel)]="UsuarioData.clave" placeholder="clave"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Privilegios de administrador:</ion-label>
+      <ion-input type="number" [(ngModel)]="UsuarioData.isAdmin" placeholder="isAdmin"></ion-input>
+    </ion-item>
+  </section>
+  <section *ngIf="tipoObjeto === 'trabajo'">
+    <ion-item>
+      <ion-label>Id:</ion-label>
+      <ion-input type="number" [(ngModel)]="TrabajoData.identificador" placeholder="Id"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Nombre:</ion-label>
+      <ion-input [(ngModel)]="TrabajoData.nombre" placeholder="Nombre del trabajo"></ion-input>
+    </ion-item>
+  </section>
+
+  <ion-button (click)="crear()" color="success" expand="block">Crear</ion-button>
+  <ion-button [routerLink]="['/inicio-admin']" color="warning" expand="block">Cancelar</ion-button>
+</ion-content>

@@ -25,7 +25,7 @@ const trabajosIdentificadorGET = ({ identificador }) => new Promise(
 * GET usuario concreto
 *
 * identificador Integer Id del usuario
-* returns List
+* returns Usuario
 * */
 const usuariosIdentificadorGET = ({ identificador }) => new Promise(
   async (resolve, reject) => {

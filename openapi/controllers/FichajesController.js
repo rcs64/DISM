@@ -12,10 +12,6 @@ const fichajesGET = async (request, response) => {
   await Controller.handleRequest(request, response, service.fichajesGET);
 };
 
-const fichajesUsuarioGET = async (request, response) => {
-  await Controller.handleRequest(request, response, service.fichajesUsuarioGET);
-};
-
 const fichajesIdentificadorDELETE = async (request, response) => {
   await Controller.handleRequest(request, response, service.fichajesIdentificadorDELETE);
 };
@@ -32,12 +28,16 @@ const fichajesPOST = async (request, response) => {
   await Controller.handleRequest(request, response, service.fichajesPOST);
 };
 
+const fichajesUsuarioGET = async (request, response) => {
+  await Controller.handleRequest(request, response, service.fichajesUsuarioGET);
+};
+
 
 module.exports = {
   fichajesGET,
-  fichajesUsuarioGET,
   fichajesIdentificadorDELETE,
   fichajesIdentificadorGET,
   fichajesIdentificadorPUT,
   fichajesPOST,
+  fichajesUsuarioGET,
 };

@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `nombre` varchar(100) NOT NULL,
   `usuario` varchar(50) default NULL,
   `clave` varchar(50) default NULL,
+  `isAdmin` int(1) default 0,
   PRIMARY KEY  (`identificador`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
