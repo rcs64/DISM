@@ -9,15 +9,27 @@ import { locateOutline } from 'ionicons/icons';
 import { FormsModule } from '@angular/forms';
 import * as Leaflet from 'leaflet';
 import { icon, Marker } from 'leaflet';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'fichajes.page.html',
   styleUrls: ['fichajes.page.scss'],
-  imports: [IonButton, IonLabel, IonItem, IonList, IonHeader, IonToolbar, IonTitle, IonContent, RouterLink, IonInput, FormsModule, IonIcon, IonToggle],
+  imports: [IonButton, IonLabel, IonItem, IonList, IonHeader, IonToolbar, IonTitle, IonContent, RouterLink, IonInput, FormsModule, IonIcon, IonToggle, CommonModule],
 })
 
 export class FichajesPage {
+  admin: Number = 0;
+  FichajeData: Fichaje = {
+    identificador: -1,
+    fechaHoraEntrada: '',
+    fechaHoraSalida: '',
+    horasTrabajadas: -1,
+    idTrabajo: -1,
+    idUsuario: -1,
+    geoLat: -1,
+    geoLong: -1
+  };
   FichajesData: Fichaje[] = [];
   FichajesDataHoy: Fichaje[] = [];
   dia: number = new Date().getDate();
@@ -106,6 +118,8 @@ export class FichajesPage {
         this.FichajesDataHoy.push({...this.FichajesData[i]}); // {...this.FichajesData[i]} clona el objeto original, porque me estaba pasando que estaba sin querer pasándolos por referencia, cargándome los datos originales con el formatearFechaHora y haciendo que no me vaya el for la segunda pasada
     }
 
+    console.log(this.FichajesDataHoy);
+
     this.leafletMap();
 
   }
@@ -117,12 +131,31 @@ export class FichajesPage {
     addIcons({ locateOutline });
   }
   ionViewWillEnter() {
+    this.FichajesData = [];
+    this.FichajesDataHoy = [];
+
     // Cargar el idUsuario desde sessionStorage ANTES de llamar getAllFichajesUsuario
     const sessionStorage_id = sessionStorage.getItem('idUsuario');
     if (sessionStorage_id !== null) {
       this.idUsuario = parseInt(sessionStorage_id);
     }
-    this.getAllFichajesUsuario();
+    
+    if(sessionStorage['admin']) {
+      this.admin = parseInt(sessionStorage['admin']);
+      if(this.admin === 1) {
+        this.mostrarSiAdmin();
+        this.dia = new Date(this.FichajeData.fechaHoraEntrada).getDate();
+        this.FichajesData.push(this.FichajeData);
+        this.filtrarPorDia();
+      }
+    }
+  }
+
+  mostrarSiAdmin() {   
+    if(this.admin === 1) {
+      const navData = history.state as { item: Fichaje };
+      if (navData && navData.item) { this.FichajeData = navData.item; } 
+    }
   }
 
   getAllFichajesUsuario() {

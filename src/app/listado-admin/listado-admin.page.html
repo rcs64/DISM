@@ -36,6 +36,20 @@
     </ion-button>
   </section>
   <section display="none" id="fichaje"> 
+    <ion-item>
+      <ion-label>Filtrar por dia</ion-label>
+      <ion-input type="number" [(ngModel)]="dia" [disabled]="diaDeshabilitado"></ion-input>
+      <ion-button (click)="deshabilitarDia();" [color]="diaDeshabilitado ? 'danger' : 'success'" size="small">
+        {{ diaDeshabilitado ? 'Habilitar' : 'Deshabilitar' }}
+      </ion-button>
+    </ion-item>
+    <ion-item>
+      <ion-label>Filtrar por nombre</ion-label>
+      <ion-input type="text" [(ngModel)]="usuario"></ion-input>
+    </ion-item>
+    <ion-button (click)="filtrarSegunEleccion(); formatearHora();">
+      Filtrar
+    </ion-button>
     <ion-list>
       @for (item of FichajeData; track item.identificador) {
         <ion-item>
@@ -49,12 +63,10 @@
             <p>Latitud: {{ item.geoLat }}</p>
             <p>Longitud: {{ item.geoLong }}</p>
           </ion-label>
-          <ion-button (click)="edit(item)" color="warning" size="small">
-            <ion-icon name="create"></ion-icon>
+          <ion-button (click)="mapa_fichaje(item)" color="warning" size="small">
+            <ion-icon name="map-outline"></ion-icon>
           </ion-button>
-          <ion-button (click)="deleteFichaje(item)" color="danger" size="small">
-            <ion-icon name="trash"></ion-icon>
-          </ion-button>
+          
         </ion-item>
       } @empty {
         <ion-item>

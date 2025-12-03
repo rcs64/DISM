@@ -78,7 +78,7 @@ export class AppComponent {
   }
 
   logout() {
-    sessionStorage['idUsuario'] = -1;
+    sessionStorage.clear();
     this.alerta('Cerrando sesión', 'Cerrar sesión');
     this.mostrarLogin();
     this.router.navigate(['/inicio']);

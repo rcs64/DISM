@@ -53,14 +53,14 @@ paths:
       description: GET usuario concreto por nombre
       operationId: usuariosByNombreGET
       parameters:
-        - description: Nombre del usuario
-          explode: false
-          in: path
-          name: usuario
-          required: true
-          schema:
-            type: string
-          style: simple
+      - description: Nombre del usuario
+        explode: false
+        in: path
+        name: usuario
+        required: true
+        schema:
+          type: string
+        style: simple
       responses:
         "200":
           content:
@@ -71,7 +71,7 @@ paths:
         "404":
           description: No se ha encontrado ningún usuario con ese nombre
       tags:
-        - usuarios
+      - usuarios
       x-eov-operation-handler: controllers/UsuariosController
   /usuarios/{identificador}:
     delete:
@@ -286,7 +286,6 @@ paths:
       tags:
       - fichajes
       x-eov-operation-handler: controllers/FichajesController
-
   /fichajes/usuario/{idUsuario}:
     get:
       description: GET fichajes por usuario
@@ -298,6 +297,33 @@ paths:
         required: true
         schema:
           type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Fichaje"
+                type: array
+          description: Lista de fichajes
+        "404":
+          description: No se ha encontrado ningún fichaje
+      tags:
+      - fichajes
+      x-eov-operation-handler: controllers/FichajesController
+
+  /fichajes/nombreUsuario/{usuario}:
+    get:
+      description: GET fichajes por nombre de usuario
+      operationId: fichajesNombreUsuarioGET
+      parameters:
+      - explode: false
+        in: path
+        name: usuario
+        required: true
+        schema:
+          type: string
         style: simple
       responses:
         "200":
@@ -508,10 +534,10 @@ components:
           maxLength: 50
           type: string
         esAdmin:
-          type: integer
-          minimum: 0
-          maximum: 1
           default: 0
+          maximum: 1
+          minimum: 0
+          type: integer
       type: object
     Trabajo:
       example:
@@ -558,8 +584,8 @@ components:
         fechaHoraEntrada:
           type: string
         fechaHoraSalida:
-          type: string
           nullable: true
+          type: string
         horasTrabajadas:
           type: number
         idTrabajo:

@@ -90,6 +90,10 @@ export class ApiService {
     return this.http.delete<Fichaje>(this.basePath + 'fichajes/' + id, this.httpOptions).pipe(retry(2), catchError(this.handleError));
   }
 
+  // Fichaje/nombreUsuario/{usuario}
+  getFichajeNombreUsuario(usuario: string): Observable<any> {
+    return this.http.get<any>(this.basePath + 'fichajes/nombreUsuario/' + usuario).pipe(retry(2), catchError(this.handleError));
+  }
   // Trabajo
   getAllTrabajos(): Observable<Trabajo[]> {
     return this.http.get<Trabajo[]>(this.basePath + 'trabajos/').pipe(retry(2), catchError(this.handleError));

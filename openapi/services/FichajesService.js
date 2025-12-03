@@ -173,6 +173,30 @@ const fichajesIdentificadorPUT = ({ identificador, body }) => new Promise(
   },
 );
 /**
+* GET fichajes por nombre de usuario
+*
+* usuario String 
+* returns List
+* */
+const fichajesNombreUsuarioGET = ({ usuario }) => new Promise(
+  async (resolve, reject) => {
+    try {
+      await conseguirpool();
+      const [filas] = await pool.execute(`SELECT f.identificador, f.fechaHoraEntrada, f.fechaHoraSalida, f.horasTrabajadas, f.idTrabajo, f.idUsuario, f.geoLat, f.geoLong 
+                                          from fichajes f, usuarios u
+                                          where f.idUsuario = u.identificador AND u.usuario = ? `, [usuario]);
+      resolve(Service.successResponse(
+        filas,
+      ));
+    } catch (e) {
+      reject(Service.rejectResponse(
+        e.message || 'Invalid input',
+        e.status || 405,
+      ));
+    }
+  },
+);
+/**
 * POST fichaje
 *
 * fichaje Fichaje 
@@ -219,4 +243,5 @@ module.exports = {
   fichajesIdentificadorGET,
   fichajesIdentificadorPUT,
   fichajesPOST,
+  fichajesNombreUsuarioGET
 };

@@ -24,6 +24,10 @@ const fichajesIdentificadorPUT = async (request, response) => {
   await Controller.handleRequest(request, response, service.fichajesIdentificadorPUT);
 };
 
+const fichajesNombreUsuarioGET = async (request, response) => {
+  await Controller.handleRequest(request, response, service.fichajesNombreUsuarioGET);
+};
+
 const fichajesPOST = async (request, response) => {
   await Controller.handleRequest(request, response, service.fichajesPOST);
 };
@@ -38,6 +42,7 @@ module.exports = {
   fichajesIdentificadorDELETE,
   fichajesIdentificadorGET,
   fichajesIdentificadorPUT,
+  fichajesNombreUsuarioGET,
   fichajesPOST,
   fichajesUsuarioGET,
 };

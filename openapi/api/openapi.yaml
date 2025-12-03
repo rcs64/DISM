@@ -312,6 +312,32 @@ paths:
       tags:
       - fichajes
       x-eov-operation-handler: controllers/FichajesController
+  /fichajes/nombreUsuario/{usuario}:
+    get:
+      description: GET fichajes por nombre de usuario
+      operationId: fichajesNombreUsuarioGET
+      parameters:
+      - explode: false
+        in: path
+        name: usuario
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Fichaje"
+                type: array
+          description: Lista de fichajes
+        "404":
+          description: No se ha encontrado ningún fichaje
+      tags:
+      - fichajes
+      x-eov-operation-handler: controllers/FichajesController
   /fichajes/{identificador}:
     delete:
       description: DELETE fichaje
